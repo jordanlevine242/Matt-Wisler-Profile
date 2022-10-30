@@ -1,0 +1,45 @@
+library(readr)
+library(dplyr)
+library(ggplot2)
+wisler <- read.csv("wisler_sliders.csv")
+alcantara <- read.csv("alcantara_sliders.csv")
+glimpse(wisler)
+
+wisler <- wisler %>% 
+  mutate(game_num = as.numeric(game_date)) %>%
+  mutate(x_movement = pfx_x*12) %>%
+  mutate(z_movement = pfx_z*12)
+
+#horizontal break
+ggplot(wisler, aes(x=game_num, y=x_movement)) + 
+  geom_point() + 
+  ylab("Horizontal Break (in.)") + 
+  xlab("Game Number") + 
+  ggtitle("Wisler Horizontal Break (SL) by Game") +
+  geom_smooth(method='lm', formula=y~x, se=FALSE)
+
+#vertical break
+ggplot(wisler, aes(x=game_num, y=z_movement)) + 
+  geom_point() + 
+  ylab("Vertical Movement (in.)") + 
+  xlab("Game Number") + 
+  ggtitle("Wisler Vertical Break (SL) by Game") +
+  geom_smooth(method='lm', formula=y~x, se=FALSE)
+
+#spin rate
+ggplot(wisler, aes(x=game_num, y=release_spin_rate)) + 
+  geom_point() + 
+  ylab("Spin Rate") + 
+  xlab("Game Number") + 
+  ggtitle("Wisler Spin Rate (SL) by Game") +
+  scale_y_continuous(limits = c(2000, 3000)) +
+  geom_smooth(method='lm', formula=y~x, se=FALSE)
+
+#spin axis
+ggplot(wisler, aes(x=game_num, y=spin_axis)) + 
+  geom_point() + 
+  ylab("Spin Axis") + 
+  xlab("Game Number") + 
+  ggtitle("Wisler Spin Axis (SL) by Game") +
+  scale_y_continuous(limits=c(0,90)) +
+  geom_smooth(method='lm', formula=y~x, se=FALSE)
